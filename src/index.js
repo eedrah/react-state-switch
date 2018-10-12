@@ -1,22 +1,23 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-
-import styles from './styles.css'
+import { Component } from 'react'
+import { func, bool } from 'prop-types'
 
 export default class ExampleComponent extends Component {
   static propTypes = {
-    text: PropTypes.string
+    children: func,
+    default: bool,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = { state: props.default || false }
+    this.toggle = this.toggle.bind(this)
+  }
+
+  toggle() {
+    this.setState({ state: !this.state.state })
   }
 
   render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
+    return this.props.children(this.toggle, this.state.state)
   }
 }
